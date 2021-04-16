@@ -38,6 +38,7 @@ class BlogPostRepository extends CoreRepository
 
         return $result;
     }
+
     /**
      *  Отримати модель для редагування в адмінці
      *  @param int $id

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\BlogPost;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class BlogPostObserver
 {
@@ -44,6 +45,14 @@ class BlogPostObserver
         if (empty($blogPost->slug)) {
             $blogPost->slug = \Str::slug($blogPost->title);
         }
+    }
+
+    public function creating(BlogPost $blogPost)
+    {
+        $blogPost->user_id = Auth::id();
+        $blogPost->content_html = $blogPost->content_raw;
+        $this->setPublishedAt($blogPost);
+
     }
 
     /**

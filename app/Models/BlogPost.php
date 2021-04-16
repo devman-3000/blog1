@@ -18,6 +18,7 @@ class BlogPost extends Model
             'category_id',
             'excerpt',
             'content_raw',
+            'content_html',
             'is_published',
             'published_at',
             'user_id',
