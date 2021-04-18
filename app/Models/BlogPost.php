@@ -24,6 +24,7 @@ class BlogPost extends Model
             'user_id',
         ];
 
+    protected $dates = ['deleted_at'];
     /**
      * Категорія статті
      *

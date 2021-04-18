@@ -7,6 +7,7 @@ use App\Repositories\BlogPostRepository;
 use App\Repositories\BlogCategoryRepository;
 use App\Http\Requests\BlogPostUpdateRequest;
 use App\Http\Requests\BlogPostCreateRequest;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -151,6 +152,8 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        BlogPost::withTrashed()->where('id', $id)->forceDelete();
+        $paginator = $this->blogPostRepository->getAllWithPaginate();
+        return view('blog.admin.posts.index', compact('paginator'));
     }
 }
