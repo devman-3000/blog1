@@ -11,6 +11,8 @@ class BlogPost extends Model
     use HasFactory;
     use SoftDeletes;
 
+    const UNKNOWN_USER = 1;
+
     protected $fillable
         = [
             'title',
@@ -18,10 +20,8 @@ class BlogPost extends Model
             'category_id',
             'excerpt',
             'content_raw',
-            'content_html',
             'is_published',
             'published_at',
-            'user_id',
         ];
 
     protected $dates = ['deleted_at'];

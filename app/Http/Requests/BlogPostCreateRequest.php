@@ -31,4 +31,25 @@ class BlogPostCreateRequest extends FormRequest
             'category_id' => 'required|integer|exists:blog_categories,id',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'Введіть загловок статті', //attribute
+            'slug.max' => 'Максимальна довжина [:max]',
+            'content_raw.min' => 'Мінімальна довжина статті [:min] символів',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'title' => 'Загловок статті',
+        ];
+    }
 }
