@@ -9,6 +9,7 @@ use App\Http\Requests\BlogPostUpdateRequest;
 use App\Http\Requests\BlogPostCreateRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use App\Jobs\BlogPostAfterCreateJob;
 use App\Jobs\BlogPostAfterDeleteJob;
@@ -42,7 +43,11 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $paginator = $this->blogPostRepository->getAllWithPaginate();
+        if(!Gate::allows('open', auth()->id())){
+            return redirect()->route('blog.posts.index');
+        }
+
+            $paginator = $this->blogPostRepository->getAllWithPaginate();
 
         return view('blog.admin.posts.index', compact('paginator'));
     }
@@ -54,6 +59,8 @@ class PostController extends BaseController
      */
     public function create()
     {
+
+
         $item = new BlogPost();
         $categoryList = $this->blogCategoryRepository->getForComboBox();
 
@@ -68,6 +75,7 @@ class PostController extends BaseController
      */
     public function store(BlogPostCreateRequest $request)
     {
+
 
         $data = $request->input(); //отримаємо масив даних, які надійшли з форми
 
@@ -107,6 +115,10 @@ class PostController extends BaseController
      */
     public function edit($id)
     {
+        if(!Gate::allows('open', auth()->id())){
+            return redirect()->route('blog.posts.index');
+        }
+
         $item = $this->blogPostRepository->getEdit($id);
         if (empty($item)) {                         //помилка, якщо репозиторій не знайде наш ід
             abort(404);
@@ -125,6 +137,8 @@ class PostController extends BaseController
      */
     public function update(BlogPostUpdateRequest $request, $id)
     {
+
+
         $item = $this->blogPostRepository->getEdit($id);
         if (empty($item)) { //якщо ід не знайдено
             return back() //redirect back

@@ -7,6 +7,7 @@ use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Models\BlogCategory;
 use App\Repositories\BlogCategoryRepository;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 //use Illuminate\Http\Request;
 
@@ -31,6 +32,10 @@ class CategoryController extends BaseController
      */
     public function index()
     {
+        if(!Gate::allows('open', auth()->id())){
+            return redirect()->route('blog.posts.index');
+        }
+
         //$paginator = BlogCategory::paginate(5);
         $paginator = $this->blogCategoryRepository->getAllWithPaginate(6);
 
@@ -96,6 +101,10 @@ class CategoryController extends BaseController
      */
     public function edit($id)
     {
+        if(!Gate::allows('open', auth()->id())){
+            return redirect()->route('blog.posts.index');
+        }
+
         $item = $this->blogCategoryRepository->getEdit($id);
         if (empty($item)) {                         //помилка, якщо репозиторій не знайде наш ід
             abort(404);
